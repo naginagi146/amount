@@ -1,0 +1,20 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <h2>概算希望商品</h2>
+    {{ form.as_p }}
+
+    <h2>添付画像</h2>
+    {{ image_formset.management_form }}
+        {% for image_form in image_formset %}
+            {{ image_form.as_p }}
+            <hr>
+        {% endfor %}
+
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">送信</button>
+</form>
+
+{% endblock %}
