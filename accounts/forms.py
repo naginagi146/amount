@@ -1,22 +1,18 @@
-# from django import forms
-# from .models import Post
+from django import forms
+from .models import Item, Image
 
-# #以下モデルのプルダウンメニュー用フォーム
-# class PostCreateForm(forms.ModelForm):
-#     Category = forms.ModelChoiceField(
-#         label='アイテムタイプ',
-#     )
-#     Conditon = forms.ModelChoiceField(
-#         label='状態ランク',
-#     )
-#     class Meta:
-#         model = Post
 
-# # class ConditionCreateForm(forms.ModelForm):
-# #     Conditon = forms.ModelChoiceField(
-# #         label='状態ランク',
-# #         queryset=Condition.objects,
-# #         required=False
-# #     )
+class ItemCreateForm(forms.ModelForm):
 
-#     field_order = ('brand', 'item_model', 'category','condition',)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+ImageFormset = forms.inlineformset_factory(
+    Item, Image, fields='__all__',
+    extra=5,
+)
