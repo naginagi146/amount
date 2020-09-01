@@ -30,7 +30,7 @@ class Image(models.Model):
     target = models.ForeignKey(
         Item, verbose_name='アイテム',
         blank=True, null=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE
     )
 
 
