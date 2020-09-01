@@ -136,19 +136,22 @@ AUTHENTICATION_BACKENDS = (
 # 1
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
- 
+
 # 2
 SITE_ID = 1
- 
+
 # 3
 LOGIN_REDIRECT_URL = 'home'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
- 
+
 # 4
 ACCOUNT_LOGOUT_ON_GET = True
- 
+
 # 5
 ACCOUNT_EMAIL_VARIFICATION = 'mandatory'
 ACCOUNT_EMAIL_REQUIRED = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #追加
+MEDIA_URL = '/media/'
