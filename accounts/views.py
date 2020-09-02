@@ -12,6 +12,17 @@ class ItemListView(ListView):
     context_object_name = 'Item'
     paginate_by = 5
 
+<<<<<<< HEAD
+=======
+
+# class ItemTemplateView(TemplateView):
+#     template_name = "index.html"
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["item_list"] = Item.objects.all()[:3]
+#         return context
+>>>>>>> develop
+
 
 class ItemCreateView(CreateView):
     model = Item, Image
@@ -27,6 +38,7 @@ class ItemCreateView(CreateView):
     def form_invalid(self, form):
         messages.warning(self.request, "完了できませんでした")
         return super().form_invalid(form)
+
 
 # def item_list(request):
 #     form = ItemCreateForm(request.POST or None)

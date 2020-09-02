@@ -21,9 +21,9 @@ class Item(models.Model):
     condition = models.CharField(max_length=1, choices=CONDITION_CHOICES)
     text = models.TextField('備考')
 
-
     def __str__(self):
         return self.name
+
 
 class Image(models.Model):
     src = models.ImageField('添付画像')
@@ -52,10 +52,8 @@ class Reply(models.Model):
 #     condition = models.ForeignKey(Item, on_delete=models.CASCADE ,related_name='condition')
 #     text = models.TextField('備考')
 
-
 #     def __str__(self):
 #         return self.name + ' ' + self.club.name
-
 
 
 # class Item_model (models.Model):
@@ -64,17 +62,20 @@ class Reply(models.Model):
 #     def __str__(self):
 #         return self.name
 
+
 # class Category (models.Model):
 #     name = models.CharField('アイテムタイプ', max_length=50)
 
 #     def __str__(self):
 #         return self.name
 
+
 # class Condition (models.Model):
 #     name = models.CharField('状態ランク', max_length=5)
 
 #     def __str__(self):
 #         return self.name
+
 
 # class Comment (models.Model):
 #     text = models.TextField('備考')
