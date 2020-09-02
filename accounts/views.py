@@ -2,21 +2,23 @@ from django.shortcuts import render
 from django.contrib import messages
 from .forms import ItemCreateForm, ImageFormset
 from .models import Item, Image
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 
-# class ItemTemplateView(TemplateView):
-#     template_name = "index.html"
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["item_list"] = Item.objects.all()[:3]
-#         return context
+
+class ItemListView(ListView):
+    model = Item, Image
+    template_name = "accounts/index.html"
+    context_object_name = 'Item'
+    paginate_by = 5
+
 
 
 class ItemCreateView(CreateView):
     model = Item, Image
+    fields = ['__all__']
     form_class = ItemCreateForm, ImageFormset
-    template_name = "item_list.html"
+    template_name = "accounts/item_list.html"
     success_url = "/"
 
     def form_valid(self, form):
