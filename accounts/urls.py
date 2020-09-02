@@ -1,10 +1,12 @@
 from django.urls import path
-from .views import ItemCreateView
-from django.conf.urls import url
+from . import views
+
+app_name = 'accounts'
 
 
 urlpatterns = [
     # path('', views.item_list, name='item_list'),
     # path('', ItemCreateView.as_view()),
-    url(r'^create$', ItemCreateView.as_view()),
+    path('', views.ItemListView.as_view(), name='home'),
+    path('', views.ItemCreateView.as_view(), name='item_create')
 ]
