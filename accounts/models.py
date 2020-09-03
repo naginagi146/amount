@@ -40,8 +40,11 @@ class Reply(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     target = models.ForeignKey(Item,on_delete=models.CASCADE)
 
+
     def __str__(self):
         return self.name
+
+
 
 
 
