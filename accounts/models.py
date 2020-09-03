@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class Item(models.Model):
 
     CATEGORY_CHOICES = (
@@ -33,6 +34,7 @@ class Image(models.Model):
         on_delete=models.CASCADE
     )
 
+
 class Reply(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField(default=0)
@@ -40,12 +42,8 @@ class Reply(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     target = models.ForeignKey(Item,on_delete=models.CASCADE)
 
-
     def __str__(self):
         return self.name
-
-
-
 
 
 # class Type (models.Model):
