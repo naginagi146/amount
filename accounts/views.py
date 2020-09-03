@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.urls import reverse_lazy
 from .forms import ItemCreateForm, ImageFormset
 from .models import Item, Image
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
+
 
 
 
@@ -12,6 +14,9 @@ class ItemListView(ListView):
     context_object_name = 'Item'
     paginate_by = 5
 
+class ItemDetailView(DetailView):
+    model = Item
+    template_name = "accounts/item_detail.html"
 
 
 class ItemCreateView(CreateView):
@@ -19,17 +24,35 @@ class ItemCreateView(CreateView):
     fields = ['__all__']
     form_class = ItemCreateForm, ImageFormset
     template_name = "accounts/item_list.html"
-    success_url = "/"
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        messages.success(self.request, "完了しました")
-        return super().form_valid(form)
+        result = super().form_valid(form)
+        messages.success(
+            self.request, '「{}」を作成しました'.format(form.instance))
+        return result
 
-    def form_invalid(self, form):
-        messages.warning(self.request, "完了できませんでした")
-        return super().form_invalid(form)
+class ItemUpdateView(UpdateView):
+    model = Item
+    form_class = ItemCreateForm, ImageFormset
+    success_url = reverse_lazy('home')
 
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        messages.success(
+            self.request, '「{}」を更新しました'.format(form.instance))
+        return result
 
+class ItemDeleteView(DeleteView):
+    model = Item
+    form_class = ItemCreateForm, ImageFormset
+    success_url = reverse_lazy('home')
+
+    def delete(self, request, *args, **kwargs):
+        result = super().delete(request, *args, **kwargs)
+        messages.success(
+            self.request, '「{}」を削除しました'.format(self.object))
+        return result
 # def item_list(request):
 #     form = ItemCreateForm(request.POST or None)
 #     context = {'form': form}

@@ -5,8 +5,9 @@ app_name = 'accounts'
 
 
 urlpatterns = [
-    # path('', views.item_list, name='item_list'),
-    # path('', ItemCreateView.as_view()),
     path('', views.ItemListView.as_view(), name='home'),
-    path('', views.ItemCreateView.as_view(), name='item_create')
+    path('', views.ItemCreateView.as_view(), name='item_create'),
+    path('', views.ItemDetailView.as_view(), name='item_detail'),
+    path('', views.ItemUpdateView.as_view(), name='item_update'),
+    path('', views.ItemDeleteView.as_view(), name='item_delete'),
 ]
