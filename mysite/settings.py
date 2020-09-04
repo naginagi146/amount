@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.google',
     'accounts',
+    'company',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -155,3 +157,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #追加
 MEDIA_URL = '/media/'
+
+AUTH_USER_MODEL = 'auth.User'

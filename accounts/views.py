@@ -53,6 +53,10 @@ class ItemDeleteView(DeleteView):
         messages.success(
             self.request, '「{}」を削除しました'.format(self.object))
         return result
+
+
+
+
 # def item_list(request):
 #     form = ItemCreateForm(request.POST or None)
 #     context = {'form': form}
