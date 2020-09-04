@@ -6,13 +6,12 @@ from .models import Item, Image
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
 
 
-
-
 class ItemListView(ListView):
     model = Item, Image
     template_name = "accounts/index.html"
     context_object_name = 'Item'
     paginate_by = 5
+
 
 class ItemDetailView(DetailView):
     model = Item
@@ -31,6 +30,7 @@ class ItemCreateView(CreateView):
         messages.success(
             self.request, '「{}」を作成しました'.format(form.instance))
         return result
+
 
 class ItemUpdateView(UpdateView):
     model = Item
