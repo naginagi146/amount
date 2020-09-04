@@ -159,3 +159,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #追加
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'auth.User'
+
+
