@@ -44,16 +44,10 @@ class ItemUpdateView(UpdateView):
         return result
 
 class ItemDeleteView(DeleteView):
+    template_name = 'accounts/item_delete.html'
     model = Item
-    form_class = ItemCreateForm, ImageFormset
-    success_url = reverse_lazy('home')
 
-    def delete(self, request, *args, **kwargs):
-        result = super().delete(request, *args, **kwargs)
-        messages.success(
-            self.request, '「{}」を削除しました'.format(self.object))
-        return result
-
+    success_url = reverse_lazy('index')
 
 
 
