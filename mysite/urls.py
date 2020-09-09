@@ -20,7 +20,7 @@ from . import views
 
 urlpatterns = [
     path('allauth/', include('allauth.urls')),
-    path('allauth/home/', views.TemplateView.as_view(), name='all_auth'),
+    path('allauth/home/', views.AllauthTemplateView.as_view(), name='all_auth'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('company/', include('company.urls')),
