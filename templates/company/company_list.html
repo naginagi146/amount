@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>アイテムリスト</title>
+</head>
+
+<body>
+
+    <form action="" method="get">
+        <input name="query" value="{{ request.GET.query }}" type="text">
+        <button type="submit">検索する</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>アイテム名</th>
+            <th>アイテムモデル</th>
+            <th>カテゴリー</th>
+        </tr>
+        {% for item in object_list %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.item_model }}</td>
+            <td>{{ item.category }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>
