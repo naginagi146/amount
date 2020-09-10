@@ -1,4 +1,4 @@
 from django.views.generic import TemplateView
 
-class AllauthTemplateView(TemplateView):
+class HomeView(TemplateView):
     template_name = "mysite/home.html"

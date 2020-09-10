@@ -11,7 +11,7 @@ class CompanyListView(ListView):
     model = Item
     queryset = Item.objects.all()
     context_object_name = 'item_listquery'
-    template_name = "company_list.html"
+    template_name = "company/company_list.html"
     paginate_by = 5
 
     def get_queryset(self):
