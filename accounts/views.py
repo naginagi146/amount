@@ -6,6 +6,7 @@ from .models import Item, Image
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
 from django.db.models import Q
 
+
 class ItemListView(ListView):
     model = Item
     queryset = Item.objects.all()
