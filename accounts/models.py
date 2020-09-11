@@ -21,6 +21,7 @@ class Item(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     condition = models.CharField(max_length=1, choices=CONDITION_CHOICES)
     text = models.TextField('備考')
+    created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name

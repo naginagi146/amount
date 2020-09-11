@@ -1,5 +1,23 @@
 {% extends 'accounts/base.html' %}
 {% load static %}
 {% block content %}
-    hello
+    <body>
+    <table border="1">
+        <tr>
+            <th>name</th>
+            <th>src</th>
+        </tr>
+        {% for item in object_list %}
+        {% for image in src %}
+            <div>
+                <img src="{{ image.modelimage.url }}" class="fit-image" alt='image'>
+            </div>
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ image.src }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </table>
+</body>
 {% endblock content %}
