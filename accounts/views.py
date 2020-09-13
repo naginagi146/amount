@@ -5,14 +5,16 @@ from .forms import ItemCreateForm, ImageFormset
 from .models import Item, Image
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
 from django.db.models import Q
+from datetime import datetime
 
 
 class ItemListView(ListView):
-    model = Item
+    model = Item, Image
     queryset = Item.objects.all()
     template_name = "accounts/index.html"
     context_object_name = 'Item'
     paginate_by = 5
+    ordering = ['-date_posted']
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -23,6 +25,11 @@ class ItemListView(ListView):
         else:
             object_list = Item.objects.all()
         return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = datetime.now()
+        return context
 
 
 class ItemDetailView(DetailView):

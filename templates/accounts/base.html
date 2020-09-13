@@ -1,33 +1,273 @@
 {% load static %}
-<!doctype html>
-<html lang="ja">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta property="og:image" content="https://freeiconshop.com/wp-content/uploads/edd/camera-flat.png" />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>nagi</title>
-  </head>
-  <body>
-    <header class='site-header'>
-    <nav class='navbar navbar-expand navbar-dark bg-steel'>
-    <div class='container'>
-    <div class='collapse navbar-collapse' id='navbarToggle'>
-    </div>
-    </div>
-    </nav>
-     </header>
-    <div class="container mt-3">
-        {% block content %}{% endblock %}
-    </div>
+        <!-- favicon -->
+
+        <link rel='icon' href="https://freeiconshop.com/wp-content/uploads/edd/camera-flat.png"> <!-- need static files set up -->
+        <link rel="apple-touch-icon" sizes="57x57" href="https://i.imgur.com/DRNgQoa.png">
+
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+        <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+
+
+        <link rel='stylesheet' type='text/css' href="{% static 'homepage/main.css' %}">
+
+        <!-- tab title -->
+        <title>Amount</title>
+
+
+    </head>
+<body>
+
+
+
+    <nav class="navbar navbar-expand fixed-top navbar-custom">
+        <div class="container" id='navbar'>
+            <div class="justify-content-start">
+                <a class="navbar-brand" href="/">
+                    <img src="https://freeiconshop.com/wp-content/uploads/edd/camera-flat.png" width='30' height='30' alt=''>
+                    <span class='align-sub' id='bar-brand'>|</span>
+                    <span class='align-sub' id='cur-brand'>Amount</span>
+                </a>
+            </div>
+{% if user.is_authenticated %}
+            <div class="d-none d-md-block justify-content-center">
+                <form action="{% url 'search-list' %}" method='GET'>
+                    <input name='q' type='text' placeholder='Search...' class='form-control' id='search-bar' autocomplete="off">
+                </form>
+            </div>
+
+            <div class="d-none d-md-block justify-content-center">
+                <ul class="navbar-nav" >
+                    <li class="nav-item">
+                        <a href="{% url 'post-add' %}">
+                            <span class="fas fa-camera"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'caseygram-explore' %}">
+                            <span class="fas fa-compass"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'notifications:unread' %}">
+                            <span class="fas fa-heart"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'public-profile' request.user.username %}">
+                            <span class="fas fa-user"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'inbox-list' %}">
+                            <span class="far fa-paper-plane"></span>
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'logout' %}">
+                            <span class="fas fa-sign-out-alt"></span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}">
+                            <span class="fas fa-sign-in-alt"></span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+            {% endif %}
+        </div>
+  </nav>
+
+
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class='alert alert-{{ message.tags }}'>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <main role="main" class="container h-100">
+            <div class="row h-100">
+                <div class="col-12 col-md-8 feed col-centered padding-0">
+
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+           </div>
+       </main>
+
+{% if user.is_authenticated %}
+<nav class="navbar fixed-bottom navbar-light bg-light navbar-expand nav-footer">
+
+                <ul class="navbar-nav nav-fill w-100" >
+                    <li class="nav-item">
+                        <a href="{% url 'post-add' %}">
+                            <span class="fas fa-camera fa-2x"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'caseygram-explore' %}">
+                            <span class="fas fa-compass fa-2x"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'notifications:unread' %}">
+                            <span class="fas fa-heart fa-2x"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'public-profile' request.user.username %}">
+                            <span class="fas fa-user fa-2x"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'inbox-list' %}">
+                            <span class="far fa-paper-plane fa-2x"></span>
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'logout' %}">
+                            <span class="fas fa-sign-out-alt fa-2x"></span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'login' %}">
+                            <span class="fas fa-sign-in-alt fa-2x"></span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+</nav>
+{% endif %}
+</body>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  </body>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
+    <script type="text/javascript">
+    $('main').on('click', '.likebutton', function(){
+        var catid;
+        catid = $(this).attr("data-catid");
+        $.ajax(
+        {
+            type:"GET",
+            url: "/likepost/",
+            data:{
+                post_id: catid
+            },
+            success: function(data){
+
+            if(data==0){
+                $('.like' + catid).toggle();
+                $('#like' + catid).toggleClass("far fas");
+                $('#likecount' + catid).html('');
+                console.log(data+'if');
+            }
+
+            else if(data==1){
+                if($('.like' + catid).is(":hidden"))
+                {
+                    $('.like' + catid).toggle();
+                }
+
+                $('#like' + catid).toggleClass("far fas");
+                $('#likecount' + catid).html(data + ' like');
+                console.log(data+'elseif');
+            }
+            else{
+
+                $('#like' + catid).toggleClass("far fas");
+                $('#likecount' + catid).html(data + ' likes');
+                console.log(data+'else');
+                }
+            }
+
+        })
+    });
+    </script>
+
+    <script type="text/javascript">
+    $('.follow').click(function(){
+        var id;
+        id = $(this).attr("id");
+        var bool;
+        bool = $(this).attr('bool');
+        $.ajax(
+        {
+            type:"GET",
+            url: "/followuser/",
+            data:{
+                user_id: id
+            },
+            success: function(data){
+
+                $('#'+ id).toggleClass("btn-secondary follow-button");
+
+                if (bool == 'true'){
+                    $('#'+ id).text('Follow');
+                    $('#'+ id).attr('bool', 'false')
+                }
+                else if (bool == 'false'){
+                    $('#'+ id).text('Following');
+                    $('#'+ id).attr('bool', 'true')
+                }
+
+                $('#followers').html(data + ' followers');
+                console.log(data);
+            }
+
+        })
+    });
+    </script>
+
+    <script src="{% static 'homepage/js/jquery.waypoints.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'homepage/js/infinite.min.js' %}"></script>
+
+      <script>
+    var infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      onBeforePageLoad: function () {
+        $('.loading').show();
+      },
+      onAfterPageLoad: function ($items) {
+        $('.loading').hide();
+      }
+    });
+  </script>
+
+
 </html>
