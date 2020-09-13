@@ -165,6 +165,6 @@ EMAIL_USE_TLS = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #追加
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'users.User'
 
 
