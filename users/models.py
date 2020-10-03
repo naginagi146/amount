@@ -3,7 +3,7 @@ from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, date_of_birth, password=None):
+    def create_user(self,email, date_of_birth, password=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -15,6 +15,9 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+    # def _create_user_(self, email, date_of_birth, password=None):
+
 
     def create_superuser(self, email, date_of_birth, password):
         user = self.create_user(
@@ -28,6 +31,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    user_name = models.CharField('ユーザーネーム', max_length=100, default='')
+    full_name = models.CharField('氏名', max_length=100, blank=False, default='')
+    company_name = models.CharField('企業名', max_length=100, blank=True, default='')
     email = models.EmailField(
         verbose_name='email',
         max_length=255,
@@ -36,6 +42,7 @@ class User(AbstractBaseUser):
     date_of_birth = models.DateField()
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_customer = models.BooleanField(default=True)
 
     objects = UserManager()
 

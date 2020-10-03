@@ -9,12 +9,12 @@ from datetime import datetime
 
 
 class ItemListView(ListView):
-    model = Item, Image
+    model = Item
     queryset = Item.objects.all()
     template_name = "accounts/index.html"
     context_object_name = 'Item'
     paginate_by = 5
-    ordering = ['-date_posted']
+    ordering = ['-created_at']
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
