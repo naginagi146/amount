@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}ホーム{% endblock %}
+{% block title %}{% endblock %}
 
-{% block content %}
-<h2>ホーム</h2>
+{% block contents %}
+<h2>Amount！</h2>
 {% if user.is_authenticated %}
-ようこそ {{ user.get_username }} さん
-<p><a href="{% url 'account_logout' %}">ログアウト</a></p>
+ログインユーザー{{ user.get_username }} さん
+<p><a href="{% url 'users:login' %}">ログアウト</a></p>
 {% else %}
-<p><a href="{% url 'account_login' %}">ログイン</a></p>
+<p><a href="{% url 'users:login' %}">ログイン</a></p>
+<p><a href="{% url 'users:users_create' %}">新規ユーザー登録</a></p>
 {% endif %}
 {% endblock %}
