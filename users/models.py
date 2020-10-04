@@ -3,7 +3,7 @@ from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self,email, date_of_birth, password=None):
+    def create_user(self, email, date_of_birth, password=None):
         if not email:
             raise ValueError('Users must have an email address')
 
