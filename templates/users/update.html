@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <h1>新規ユーザー作成画面</h1>
+    <h1>登録情報の編集</h1>
     <form method="post" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" href="{% url 'users:login' %}" value="登録">
+        <li><input type="submit" href="{% url 'users:profile' %}" value="登録"></li>
     </form>
 </body>
 {% endblock %}
