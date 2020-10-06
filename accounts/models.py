@@ -1,3 +1,4 @@
+from users.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -22,6 +23,7 @@ class Item(models.Model):
     condition = models.CharField(max_length=1, choices=CONDITION_CHOICES)
     text = models.TextField('備考')
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

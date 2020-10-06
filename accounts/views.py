@@ -6,13 +6,14 @@ from .models import Item, Image
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
 from django.db.models import Q
 from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ItemListView(ListView):
+class ItemListView(LoginRequiredMixin, ListView):
     model = Item
     queryset = Item.objects.all()
-    template_name = "accounts/index.html"
-    context_object_name = 'Item'
+    template_name = "accounts/item_list.html"
+    context_object_name = 'items'
     paginate_by = 5
     ordering = ['-created_at']
 
@@ -26,22 +27,17 @@ class ItemListView(ListView):
             object_list = Item.objects.all()
         return object_list
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["now"] = datetime.now()
-        return context
 
-
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
     template_name = "accounts/item_detail.html"
 
 
-class ItemCreateView(CreateView):
+class ItemCreateView(LoginRequiredMixin, CreateView):
     model = Item, Image
     fields = ['__all__']
     form_class = ItemCreateForm, ImageFormset
-    template_name = "accounts/item_list.html"
+    template_name = "accounts/item_create.html"
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
@@ -51,7 +47,7 @@ class ItemCreateView(CreateView):
         return result
 
 
-class ItemUpdateView(UpdateView):
+class ItemUpdateView(LoginRequiredMixin, UpdateView):
     model = Item
     form_class = ItemCreateForm, ImageFormset
     success_url = reverse_lazy('home')
@@ -62,7 +58,7 @@ class ItemUpdateView(UpdateView):
             self.request, '「{}」を更新しました'.format(form.instance))
         return result
 
-class ItemDeleteView(DeleteView):
+class ItemDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'accounts/item_delete.html'
     model = Item
 
