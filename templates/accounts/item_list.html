@@ -3,9 +3,13 @@
 
 {% block contents %}
     <body>
+    <div class="post">
+        <p>ユーザー: {{ item.contributor }}</p>
         {% for item in items %}
-            <p>アイテム名: {{ item.name }}</p>
+           アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
             <p>カテゴリー: {{ item.category }}</p>
         {% endfor %}
-</body>
+        </div>
+    </body>
 {% endblock %}
+<a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>

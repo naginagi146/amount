@@ -10,7 +10,7 @@ from django.db.models import Q
 class CompanyListView(ListView):
     model = Item
     queryset = Item.objects.all()
-    context_object_name = 'item_listquery'
+    context_object_name = 'products'
     template_name = "company/company_list.html"
     paginate_by = 5
 

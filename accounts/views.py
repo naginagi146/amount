@@ -1,3 +1,5 @@
+from users.views import OnlyYouMixin
+from django.http import request
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -7,15 +9,26 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView, D
 from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.http import HttpResponseRedirect
+
+
 
 
 class ItemListView(LoginRequiredMixin, ListView):
     model = Item
-    queryset = Item.objects.all()
     template_name = "accounts/item_list.html"
     context_object_name = 'items'
     paginate_by = 5
     ordering = ['-created_at']
+
+    def get_queryset(self):
+        current_user = self.request.user
+        if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
+            return Item.objects.all()
+        else: # 一般ユーザは自分のレコードのみ表示する。
+            return Item.objects.filter(contributor=request.user.id)
+            #↑上手く動かない！！
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -34,36 +47,76 @@ class ItemDetailView(LoginRequiredMixin, DetailView):
 
 
 class ItemCreateView(LoginRequiredMixin, CreateView):
-    model = Item, Image
-    fields = ['__all__']
-    form_class = ItemCreateForm, ImageFormset
+    model = Item
+    form_class = ItemCreateForm
+    formset = ImageFormset
     template_name = "accounts/item_create.html"
-    success_url = reverse_lazy('home')
+
+
+    def get_context_data(self, **kwargs):
+        data = super(ItemCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['formset'] = ImageFormset(self.request.POST)
+        else:
+            data['formset'] = ImageFormset()
+        return data
 
     def form_valid(self, form):
-        result = super().form_valid(form)
-        messages.success(
-            self.request, '「{}」を作成しました'.format(form.instance))
-        return result
+        context = self.get_context_data()
+        ImageFormset = context['formset']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            form.instance.updated_by = self.request.user
+            self.object = form.save()
+        if ImageFormset.is_valid():
+            ImageFormset.instance = self.object
+            ImageFormset.save()
 
+        return super(ItemCreateView, self).form_valid(form)
 
+    def get_success_url(self):
+        return reverse_lazy('accounts:item_list')
 class ItemUpdateView(LoginRequiredMixin, UpdateView):
     model = Item
-    form_class = ItemCreateForm, ImageFormset
-    success_url = reverse_lazy('home')
+    form_class = ItemCreateForm
+    formset = ImageFormset
+    template_name = "accounts/item_update.html"
+
+    def get_context_data(self, **kwargs):
+        data = super(ItemUpdateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['formset'] = ImageFormset(self.request.POST)
+        else:
+            data['formset'] = ImageFormset()
+        return data
 
     def form_valid(self, form):
-        result = super().form_valid(form)
-        messages.success(
-            self.request, '「{}」を更新しました'.format(form.instance))
-        return result
+        context = self.get_context_data()
+        ImageFormset = context['formset']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            form.instance.updated_by = self.request.user
+            self.object = form.save()
+        if ImageFormset.is_valid():
+            ImageFormset.instance = self.object
+            ImageFormset.save()
+
+        return super(ItemUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:item_detail',  kwargs={'pk': self.object.pk})
 
 class ItemDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'accounts/item_delete.html'
     model = Item
 
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('accounts:item_list')
 
+    def delete(self, request, *args, **kwargs):
+        result = super().delete(request, *args, **kwargs)
+        messages.success(
+            self.request, '「{}」を削除しました'.format(self.object))
+        return result
 
 
 # def item_list(request):

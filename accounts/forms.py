@@ -11,10 +11,10 @@ class ItemCreateForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = '__all__'
+        fields = ('__all__')
 
 
 ImageFormset = forms.inlineformset_factory(
-    Item, Image, fields='__all__',
+    Item, Image, fields ='__all__',
     extra=5,
 )

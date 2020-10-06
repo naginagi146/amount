@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+{% if user.is_authenticated %}
+    <h2>Delete</h2>
+    <p>本当に{{ item.name }}を削除しますか？<p>
+    <form method="POST" >{% csrf_token %}
+        <button type="submit" href="{% url 'accounts:item_list' %}" class="save btn btn-danger">delete</button>
+    </form>
+{% endif %}
+{% endblock %}
+
