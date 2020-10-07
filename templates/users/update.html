@@ -14,7 +14,7 @@
     <form method="post" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
-        <li><input type="submit" href="{% url 'users:profile' %}" value="登録"></li>
+        <li><input type="submit" href="{% url 'users:profile' user.pk %}" value="登録"></li>
     </form>
 </body>
 {% endblock %}

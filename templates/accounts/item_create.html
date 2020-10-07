@@ -7,7 +7,7 @@
     {{ form.as_p }}
 {% for form in formset.forms %}
     <h2>添付画像</h2>
-    {{ image_formset.management_form }}
+    {{　formset.management_form }}
             {{ form.as_p }}
             <hr>
 {% endfor %}

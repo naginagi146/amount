@@ -10,7 +10,7 @@
                     {{ field.errors }}
                     <hr>
                 {% endfor %}
-                <button type="submit" class="btn btn-success btn-lg btn-block" ><a href="{% url 'users:profile' %}">ログイン</button>
+                <button type="submit" class="btn btn-success btn-lg btn-block" ><a href="{% url 'home' %}">ログイン</button>
                 <input type="hidden" name="next" value="{{ next }}" />
                 <p><a href="{% url 'users:users_create' %}">新規ユーザー登録</a></p>
                 {% csrf_token %}

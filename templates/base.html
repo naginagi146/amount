@@ -24,9 +24,7 @@
         <li class="nav-item active">
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active">
-            <a class="nav-link"  href="{% url 'users:profile' pk=user.pk %}">プロフィール <span class="sr-only">(current)</span></a>
-        </li>
+
         </ul>
         {% if user.is_authenticated %}
 
@@ -35,12 +33,19 @@
             <li class="nav-item active">
             <a class="nav-link"  href="{% url 'accounts:item_create' %}">新規投稿 <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item active">
+            <a class="nav-link"  href="{% url 'users:profile' user.pk %}">プロフィール <span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{user.username}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'accounts:item_list' %}">アイテムリスト</a>
+                {% if not perms.users.is_customer %}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'company:company_list' %}">全アイテムリスト</a>
+                {% endif %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Logout</a>
             </div>
