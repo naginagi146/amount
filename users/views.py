@@ -29,11 +29,10 @@ class UserCreateView(CreateView):
 
 
 
-class ProfileView(LoginRequiredMixin, TemplateView):
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = User
     template_name = "users/profile.html"
 
-def get_queryset(self):
-        return User.objects.get(id=self.request.user.id)
 
 
 
@@ -50,7 +49,7 @@ class Login(LoginView):
 class UserUpdateView(LoginRequiredMixin, OnlyYouMixin, UpdateView):
     form_class = UserUpdateForm
     success_url = reverse_lazy('users:profile')
-    template_name = 'users/signup.html'
+    template_name = 'users/update.html'
 
     def get_object(self):
         return self.request.user

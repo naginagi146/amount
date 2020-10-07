@@ -8,7 +8,8 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/accounts.css' %}"> {% endcomment %}
    {% block title %}
    {% endblock title %}
  <!--Navbar Starts Here-->
@@ -24,13 +25,16 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link"  href="{% url 'users:profile' %}">プロフィール <span class="sr-only">(current)</span></a>
+            <a class="nav-link"  href="{% url 'users:profile' pk=user.pk %}">プロフィール <span class="sr-only">(current)</span></a>
         </li>
         </ul>
         {% if user.is_authenticated %}
 
 
         <ul class="navbar-nav">
+            <li class="nav-item active">
+            <a class="nav-link"  href="{% url 'accounts:item_create' %}">新規投稿 <span class="sr-only">(current)</span></a>
+            </li>
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{user.username}}
