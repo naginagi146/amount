@@ -12,7 +12,17 @@
             <p>備考: {{ item.text }}</p>
         {% if user.is_authenticated %}
         <a class="btn btn-default" href="{% url 'accounts:item_update' pk=item.pk %}">編集</a>
-         <a class="btn btn-default" href="{% url 'accounts:item_delete' pk=item.pk %}">削除</a>
+        <a class="btn btn-default" href="{% url 'accounts:item_delete' pk=item.pk %}">削除</a>
+        {% for reply in item.replys %}
+        会社:{{ reply.user }}<br>
+        金額:{{ reply.price }}<br>
+        備考:{{ reply.text }}<br>
+        {% endfor %}
         {% endif %}
+        {% if not user.is_customer.is_superuser %}
+        <a class="btn btn-default" href="{% url 'company:reply_create' pk=item.pk %}">新規概算</a>
+        {% endif %}
+
+
 </body>
 {% endblock %}

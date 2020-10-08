@@ -1,3 +1,4 @@
+from users.models import User
 from users.views import OnlyYouMixin
 from django.http import request
 from django.shortcuts import render
@@ -24,23 +25,32 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         current_user = self.request.user
-        if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
+        if current_user.is_superuser.is_customer(False): # スーパーユーザとカスタマー以外(company)の場合、リストにすべてを表示する。
             return Item.objects.all()
-        elif current_user.is_customer:#カスタマーの場合自分のレコード表示
+        else: #カスタマーの場合自分のレコード表示
             return Item.objects.filter(contributor_id=request.user.id)
-        else: # カスタマーでもスーパーユーザでもない場合（company)全てのレコード表示
-            return Item.objects.all()
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
 
         if q_word:
             object_list = Item.objects.filter(
-                Q(name__icontains=q_word) | Q(item_model__icontains=q_word) | Q(category__icontains=q_word))
+                Q(name__icontains=q_word) | Q(item_model__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__email__icontains=q_word))
         else:
             object_list = Item.objects.all()
         return object_list
 
+# class UserItemListView(ListView):
+#     model = Item
+#     context_object_name = 'user_items'
+#     template_name = "user_item_list.html"
+#     paginate_by = 10
+#     ordering = ['-created_at']
+
+    # def get_queryset(self,):
+    #     current_user = self.request.user
+    #     if not current_user.is_customer:
+    #         return Item.objects.filter(contributor__id=User.objects.get('user_name'))
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item

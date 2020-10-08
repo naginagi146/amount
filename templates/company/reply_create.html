@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contents %}
+<body>
+<h1>概算を答える</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+    <button type="submit" href="{% url 'accounts:item_list' %}" class="btn btn-primary">送信</button>
+</form>
+</body>
+{% endblock %}
