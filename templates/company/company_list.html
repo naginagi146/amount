@@ -1,32 +1,23 @@
-<html>
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <title>アイテムリスト</title>
-</head>
 
-<body>
+{% block contents %}
 
-    <form action="" method="get">
+    <body>
+        <form action="" method="get">
         <input name="query" value="{{ request.GET.query }}" type="text">
         <button type="submit">検索する</button>
-    </form>
-
-    <table border="1">
-        <tr>
-            <th>アイテム名</th>
-            <th>アイテムモデル</th>
-            <th>カテゴリー</th>
-        </tr>
+        </form>
+    <div class="post">
         {% for item in products %}
-        <tr>
-            <td>{{ item.name }}</td>
-            <td>{{ item.item_model }}</td>
-            <td>{{ item.category }}</td>
-        </tr>
+            <p>ユーザー: {{ item.contributor }}</p>
+            アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
+            <p>カテゴリー: {{ item.category }}</p>
         {% endfor %}
-    </table>
-
-</body>
+        </div>
+    </body>
+{% endblock %}
+<a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
 
 </html>

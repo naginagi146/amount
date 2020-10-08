@@ -12,7 +12,8 @@ class CompanyListView(ListView):
     queryset = Item.objects.all()
     context_object_name = 'products'
     template_name = "company/company_list.html"
-    paginate_by = 5
+    paginate_by = 10
+
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -23,6 +24,16 @@ class CompanyListView(ListView):
         else:
             object_list = Item.objects.all()
         return object_list
+
+class UserItemListView(ListView):
+    model = Item
+    context_object_name = 'user_items'
+    template_name = "company/user_item.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Item.objects.filter()
+    # ↑ユーザーごとのアイテムリスト表示
 
 class CompanyDetailView(DetailView):
     model = Item

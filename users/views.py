@@ -1,14 +1,11 @@
-from django.http import request
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
+from django.views.generic import CreateView, DetailView, UpdateView
 from .models import User
-from .forms import LoginForm, UserCreationForm, UserChangeForm, UserUpdateForm
-from django.urls import reverse, reverse_lazy
+from .forms import LoginForm, UserCreationForm, UserUpdateForm
+from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import LoginForm
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 
 class OnlyYouMixin(UserPassesTestMixin):
     raise_exception = True
@@ -20,22 +17,34 @@ class OnlyYouMixin(UserPassesTestMixin):
 class UserCreateView(CreateView):
     model = User
     form_class = UserCreationForm
-    success_url = reverse_lazy('users:login')
-    template_name = 'users/update.html'
+    template_name = 'users/signup.html'
 
     def form_valid(self, form):
-        messages.success(self.request, "登録しました")
-        return super().form_valid(form)
+        result = super().form_valid(form)
+        return result
+
+    def get_success_url(self):
+        return reverse_lazy('users/profile', kwargs={'pk': self.object.pk})
 
 
-
-class ProfileView(LoginRequiredMixin, DetailView):
+class ProfileView(OnlyYouMixin, DetailView):
     model = User
     template_name = "users/profile.html"
 
+class UserUpdateView(OnlyYouMixin, UpdateView):
+    form_class = UserUpdateForm
+    success_url = reverse_lazy('users:profile')
+    template_name = 'users/update.html'
 
+    def get_object(self):
+        return self.request.user
+    
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        return result
 
-
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={'pk': self.object.pk})
 
 class Logout(LogoutView):
     template_name = 'mysite/home.html'
@@ -44,16 +53,3 @@ class Logout(LogoutView):
 class Login(LoginView):
     form_class = LoginForm
     template_name = 'users/login.html'
-
-
-class UserUpdateView(LoginRequiredMixin, OnlyYouMixin, UpdateView):
-    form_class = UserUpdateForm
-    success_url = reverse_lazy('users:profile')
-    template_name = 'users/update.html'
-
-    def get_object(self):
-        return self.request.user
-
-    def form_valid(self, form):
-        messages.success(self.request, "登録しました")
-        return super().form_valid(form)

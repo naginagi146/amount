@@ -19,16 +19,17 @@ class ItemListView(LoginRequiredMixin, ListView):
     model = Item
     template_name = "accounts/item_list.html"
     context_object_name = 'items'
-    paginate_by = 5
+    paginate_by = 10
     ordering = ['-created_at']
 
     def get_queryset(self):
         current_user = self.request.user
         if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
             return Item.objects.all()
-        else: # 一般ユーザは自分のレコードのみ表示する。
-            return Item.objects.filter(contributor=request.user.id)
-            #↑上手く動かない！！
+        elif current_user.is_customer:#カスタマーの場合自分のレコード表示
+            return Item.objects.filter(contributor_id=request.user.id)
+        else: # カスタマーでもスーパーユーザでもない場合（company)全てのレコード表示
+            return Item.objects.all()
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -63,15 +64,12 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         context = self.get_context_data()
-        ImageFormset = context['formset']
-        with transaction.atomic():
-            form.instance.created_by = self.request.user
-            form.instance.updated_by = self.request.user
-            self.object = form.save()
-        if ImageFormset.is_valid():
-            ImageFormset.instance = self.object
-            ImageFormset.save()
-
+        image_formset = context['formset']
+        if image_formset.is_valid():
+            with transaction.atomic():
+                image_formset.instance = self.object
+                image_formset.save()
+                self.object = form.save()
         return super(ItemCreateView, self).form_valid(form)
 
     def get_success_url(self):
@@ -92,14 +90,13 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         context = self.get_context_data()
-        ImageFormset = context['formset']
-        with transaction.atomic():
-            form.instance.created_by = self.request.user
-            form.instance.updated_by = self.request.user
-            self.object = form.save()
-        if ImageFormset.is_valid():
-            ImageFormset.instance = self.object
-            ImageFormset.save()
+        image_formset = context['formset']
+
+        if image_formset.is_valid():
+            with transaction.atomic():
+                image_formset.instance = self.object
+                image_formset.save()
+                self.object = form.save()
 
         return super(ItemUpdateView, self).form_valid(form)
 
