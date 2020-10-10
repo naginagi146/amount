@@ -51,8 +51,8 @@
             </div>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0"  action="#" method='GET'>
-            <input class="form-control mr-sm-2" type="search" name='q' aria-label="Search" placeholder='Search' value={{request.GET.q}}  >
+        <form class="form-inline my-2 my-lg-0"  action="{% url 'accounts:item_list'%}" method='GET'>
+            <input class="form-control mr-sm-2" type="search" name='query' aria-label="Search" placeholder='Search' value={{request.GET.query}}  >
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         {% else %}

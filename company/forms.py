@@ -5,5 +5,5 @@ class ReplyCreateForm(forms.ModelForm):
 
     class Meta:
         model = Reply
-        fields = ("user", "price", "text")
+        fields = ( "price", "text")
 
