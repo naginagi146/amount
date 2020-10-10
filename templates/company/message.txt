@@ -1,0 +1,8 @@
+登録した商品にコメントされました。
+
+処理内容：{{ action }}
+担当ユーザー{{ user.company_name }}
+概算金額：{{ reply.price }}
+備考：{{ reply.text }}
+
+http://localhost:8000/detail/{{ reply.pk }}
