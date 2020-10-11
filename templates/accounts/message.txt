@@ -1,0 +1,14 @@
+商品が追加されました。
+
+処理内容：{{ action }}
+ユーザー: {{ user.user_name }}
+アイテム名: {{ item.name }}
+カテゴリー: {{ item.category }}
+状態: {{ item.condition }}
+モデル名: {{ item.item_model }}
+作成日: {{ item.created_at }}
+備考: {{ item.text }}
+処理内容：{{ action }}
+
+
+http://localhost:8000/detail/{{ item.pk }}
