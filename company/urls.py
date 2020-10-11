@@ -9,5 +9,5 @@ urlpatterns = [
     # path('company/item/detail/<int:pk>/', views.CompanyDetailView.as_view(), name='company_detail'),
     path('reply/create/<int:pk>/', views.ReplyCreateView.as_view(), name='reply_create'),
     path('company/reply/update/<int:pk>/', views.ReplyUpdateView.as_view(), name='company_update'),
-    path('company/reply/delete/', views.ReplyDeleteView.as_view(), name='company_delete'),
+    path('reply/delete/<int:pk>/', views.ReplyDeleteView.as_view(), name='reply_delete'),
 ]

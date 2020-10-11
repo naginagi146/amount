@@ -1,3 +1,4 @@
+from company.models import Reply
 from users.models import User
 from users.views import OnlyYouMixin
 from django.http import request
@@ -25,10 +26,12 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         current_user = self.request.user
-        if current_user.is_superuser.is_customer(False): # スーパーユーザとカスタマー以外(company)の場合、リストにすべてを表示する。
+        if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
             return Item.objects.all()
-        else: #カスタマーの場合自分のレコード表示
+        elif current_user.is_customor:#カスタマーの場合自分のレコード表示
             return Item.objects.filter(contributor_id=request.user.id)
+        else: #それ以外
+            return Item.objects.all()
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -39,22 +42,29 @@ class ItemListView(LoginRequiredMixin, ListView):
         else:
             object_list = Item.objects.all()
         return object_list
+class UserItemListView(ListView):
+    model = Item
+    template_name = "accounts/user_item_list.html"
+    context_object_name = 'items'
+    paginate_by = 10
+    ordering = ['-created_at']
 
-# class UserItemListView(ListView):
-#     model = Item
-#     context_object_name = 'user_items'
-#     template_name = "user_item_list.html"
-#     paginate_by = 10
-#     ordering = ['-created_at']
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super().get_context_data(**kwargs)
+        context["items"] = user.item_set.all().order_by('-created_at')
+        return context
 
-    # def get_queryset(self,):
-    #     current_user = self.request.user
-    #     if not current_user.is_customer:
-    #         return Item.objects.filter(contributor__id=User.objects.get('user_name'))
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
     template_name = "accounts/item_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["replys"] = Reply.objects.filter(target_id=self.kwargs['pk'])
+        return context
+
 
 
 class ItemCreateView(LoginRequiredMixin, CreateView):

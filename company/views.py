@@ -7,6 +7,10 @@ from accounts.models import Item
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404
+from.notify import send_notification
+from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.mixins import OnlyYouMixin
+
 
 
 # class CompanyListView(ListView):
@@ -42,7 +46,7 @@ from django.shortcuts import redirect, get_object_or_404
 #     template_name = "comapny/company_detail.html"
 
 
-class ReplyCreateView(CreateView):
+class ReplyCreateView(LoginRequiredMixin, CreateView):
     model = Reply
     form_class = ReplyCreateForm
     template_name = "company/reply_create.html"
@@ -52,9 +56,12 @@ class ReplyCreateView(CreateView):
         item = get_object_or_404(Item, pk=item_pk)
 
         comment = form.save(commit=False)
-        comment.create_user=self.request.user
-        comment.create_target=item
+        form.instance.user=self.request.user
+        form.instance.target=item
+        comment.item=item
         comment.save()
+        send_notification(comment, '登録')
+
         messages.success(
             self.request, '「{}」を返信しました'.format(form.instance))
         return redirect('accounts:item_detail', pk=item_pk)
@@ -80,8 +87,8 @@ class ReplyUpdateView(UpdateView):
         context["Item"] = self.kwargs['Item']
         return context
 
-class ReplyDeleteView(DeleteView):
+class ReplyDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'company/reply_delete.html'
     model = Reply
-
-    success_url = reverse_lazy('companylist')
+    def get_success_url(self):
+        return reverse_lazy('accounts:item_detail',  kwargs={'pk': self.object.pk})
