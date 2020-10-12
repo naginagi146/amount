@@ -13,6 +13,7 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import HttpResponseRedirect
+from .notify import send_notification
 
 
 
@@ -26,11 +27,9 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         current_user = self.request.user
-        if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
-            return Item.objects.all()
-        elif current_user.is_customor:#カスタマーの場合自分のレコード表示
+        if current_user.is_customor:
             return Item.objects.filter(contributor_id=request.user.id)
-        else: #それ以外
+        else:
             return Item.objects.all()
 
     def get_queryset(self):
@@ -38,22 +37,27 @@ class ItemListView(LoginRequiredMixin, ListView):
 
         if q_word:
             object_list = Item.objects.filter(
-                Q(name__icontains=q_word) | Q(item_model__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__email__icontains=q_word))
+                Q(name__icontains=q_word) | Q(item_model__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
         else:
             object_list = Item.objects.all()
         return object_list
+
 class UserItemListView(ListView):
     model = Item
     template_name = "accounts/user_item_list.html"
-    context_object_name = 'items'
+    context_object_name = 'user_item'
     paginate_by = 10
     ordering = ['-created_at']
 
-    def get_context_data(self, **kwargs):
-        user = self.request.user
-        context = super().get_context_data(**kwargs)
-        context["items"] = user.item_set.all().order_by('-created_at')
-        return context
+    def get_queryset(self):
+        return Item.objects.filter(contributor__id=self.kwargs['user_id'])
+    # 表示されねえ・・・forループの書き方？
+
+    # def get_context_data(self, **kwargs):
+    #     user = self.request.user
+    #     context = super().get_context_data(**kwargs)
+    #     context["items"] = user.item_set.all().order_by('-created_at')
+    #     return context
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
@@ -90,6 +94,7 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
                 image_formset.instance = self.object
                 image_formset.save()
                 self.object = form.save()
+                send_notification(self.object, '登録')
         return super(ItemCreateView, self).form_valid(form)
 
     def get_success_url(self):

@@ -10,5 +10,5 @@ urlpatterns = [
     path('item/detail/<int:pk>', views.ItemDetailView.as_view(), name='item_detail'),
     path('item/update/<int:pk>', views.ItemUpdateView.as_view(), name='item_update'),
     path('item/delete/<int:pk>', views.ItemDeleteView.as_view(), name='item_delete'),
-    path('user/item/list/<int:user_id>', views.UserItemListView.as_view(), name='user_item_list'),
+    path('user/item/list/<user_id>', views.UserItemListView.as_view(), name='user_item_list'),
 ]
