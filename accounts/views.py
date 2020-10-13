@@ -60,7 +60,7 @@ class UserItemListView(ListView):
     #     return context
 
 
-class ItemDetailView(LoginRequiredMixin, DetailView):
+class ItemDetailView(DetailView):
     model = Item
     template_name = "accounts/item_detail.html"
 
@@ -95,6 +95,11 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
                 image_formset.save()
                 self.object = form.save()
                 send_notification(self.object, '登録')
+            return  self.form_valid(image_formset)
+
+        else:
+            self.form_invalid(form)
+
         return super(ItemCreateView, self).form_valid(form)
 
     def get_success_url(self):

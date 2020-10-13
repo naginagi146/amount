@@ -13,6 +13,10 @@
         <label>
         <a href="{% url 'users:update' user.pk  %}" class="btn btn-primary ">変更</a>
         </label>
-
+        {% for item in user_item %}
+        ユーザー: {{ item.contributor.user_name }}</a>
+        アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
+        <p>カテゴリー: {{ item.category }}</p>
+        {% endfor %}
 {% endblock %}
 

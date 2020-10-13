@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, UpdateView
 from .models import User
+from accounts.models import Item
 from .forms import LoginForm, UserCreationForm, UserUpdateForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
@@ -27,9 +28,14 @@ class UserCreateView(CreateView):
         return reverse_lazy('users/profile', kwargs={'pk': self.object.pk})
 
 
-class ProfileView(OnlyYouMixin, DetailView):
+class ProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "users/profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_item"] = Item.objects.filter(contributor_id=self.kwargs['pk'])
+        return context
 
 class UserUpdateView(OnlyYouMixin, UpdateView):
     form_class = UserUpdateForm
