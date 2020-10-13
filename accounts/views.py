@@ -37,7 +37,7 @@ class ItemListView(LoginRequiredMixin, ListView):
 
         if q_word:
             object_list = Item.objects.filter(
-                Q(name__icontains=q_word) | Q(item_model__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
+                Q(name__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
         else:
             object_list = Item.objects.all()
         return object_list
@@ -50,7 +50,7 @@ class UserItemListView(ListView):
     ordering = ['-created_at']
 
     def get_queryset(self):
-        return Item.objects.filter(contributor__id=self.kwargs['user_id'])
+        return Item.objects.filter(user=self.request.user)
     # 表示されねえ・・・forループの書き方？
 
     # def get_context_data(self, **kwargs):
