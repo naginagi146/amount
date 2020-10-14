@@ -6,7 +6,7 @@
     <div class="post">
 
         {% for item in items %}
-            ユーザー: <a href="{% url 'accounts:user_item_list' user_id=item.pk %}">{{ item.contributor.user_name }}</a>
+            ユーザー: <a href="{% url 'users:profile' pk=user.pk %}">{{ item.contributor.user_name }}</a>
             アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
             <p>カテゴリー: {{ item.category }}</p>
         {% endfor %}
