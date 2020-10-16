@@ -27,10 +27,18 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         current_user = self.request.user
+        q_word = self.request.GET.get('query')
         if current_user.is_customor:
             return Item.objects.filter(contributor_id=request.user.id)
         else:
-            return Item.objects.all()
+            Item.objects.all()
+
+        if q_word:
+            object_list = Item.objects.filter(
+                Q(name__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
+        else:
+            object_list = Item.objects.all()
+        return object_list
 
     def get_queryset(self):
         q_word = self.request.GET.get('query')
@@ -60,7 +68,7 @@ class UserItemListView(ListView):
     #     return context
 
 
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
     template_name = "accounts/item_detail.html"
 

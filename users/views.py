@@ -32,6 +32,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "users/profile.html"
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user_item"] = Item.objects.filter(contributor_id=self.kwargs['pk'])
