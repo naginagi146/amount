@@ -2,12 +2,12 @@
 {% load static %}
 {% block contents %}
 
-<form action="" method="post" enctype="multipart/form-data">
+<form  method="post" class="create" enctype="multipart/form-data">
     <h2>概算希望商品</h2>
     {{ form.as_p }}
 {% for form in formset.forms %}
     <h2>添付画像</h2>
-    {{　formset.management_form }}
+    {{ formset.management_form }}
             {{ form.as_p }}
             <hr>
 {% endfor %}

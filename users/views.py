@@ -45,7 +45,7 @@ class UserUpdateView(OnlyYouMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
-    
+
     def form_valid(self, form):
         result = super().form_valid(form)
         return result
