@@ -31,11 +31,11 @@ class Item(models.Model):
 
 
 class Image(models.Model):
-    src = models.ImageField('添付画像', upload_to='media/')
+    src = models.ImageField('添付画像')
     target = models.ForeignKey(
         Item, verbose_name='アイテム',
         blank=True, null=True,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE, related_name='images'
     )
 
 
