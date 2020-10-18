@@ -28,27 +28,24 @@ class ItemListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         current_user = self.request.user
         q_word = self.request.GET.get('query')
-        if current_user.is_customor:
-            return Item.objects.filter(contributor_id=request.user.id)
-        else:
-            Item.objects.all()
-
-        if q_word:
+        if current_user.is_customer:
+            return Item.objects.filter(contributor_id=current_user.id)
+        elif q_word:
             object_list = Item.objects.filter(
                 Q(name__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
+            return object_list
         else:
-            object_list = Item.objects.all()
-        return object_list
+            return Item.objects.all()
 
-    def get_queryset(self):
-        q_word = self.request.GET.get('query')
+    # def get_queryset(self):
+    #     q_word = self.request.GET.get('query')
 
-        if q_word:
-            object_list = Item.objects.filter(
-                Q(name__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
-        else:
-            object_list = Item.objects.all()
-        return object_list
+    #     if q_word:
+    #         object_list = Item.objects.filter(
+    #             Q(name__icontains=q_word) | Q(category__icontains=q_word) | Q(contributor__user_name__icontains=q_word))
+    #     else:
+    #         object_list = Item.objects.all()
+    #     return object_list
 
 class UserItemListView(ListView):
     model = Item
@@ -89,7 +86,7 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         data = super(ItemCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            data['formset'] = ImageFormset(self.request.POST)
+            data['formset'] = ImageFormset(self.request.POST, self.request.FILES)
         else:
             data['formset'] = ImageFormset()
         return data
@@ -97,21 +94,19 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         image_formset = context['formset']
+
         if image_formset.is_valid():
             with transaction.atomic():
                 image_formset.instance = self.object
                 image_formset.save()
                 self.object = form.save()
                 send_notification(self.object, '登録')
-            return  self.form_valid(image_formset)
 
-        else:
-            self.form_invalid(form)
-
-        return super(ItemCreateView, self).form_valid(form)
+        return super(ItemCreateView, self).form_valid(image_formset)
 
     def get_success_url(self):
         return reverse_lazy('accounts:item_list')
+
 class ItemUpdateView(LoginRequiredMixin, UpdateView):
     model = Item
     form_class = ItemCreateForm

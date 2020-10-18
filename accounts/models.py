@@ -31,7 +31,7 @@ class Item(models.Model):
 
 
 class Image(models.Model):
-    src = models.ImageField('添付画像')
+    src = models.ImageField('添付画像', upload_to='media/')
     target = models.ForeignKey(
         Item, verbose_name='アイテム',
         blank=True, null=True,
