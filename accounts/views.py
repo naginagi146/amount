@@ -25,6 +25,12 @@ class ItemListView(LoginRequiredMixin, ListView):
     paginate_by = 10
     ordering = ['-created_at']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["images"] = Image.objects.filter(id=self.target_id)
+        return context
+
+
     def get_queryset(self):
         current_user = self.request.user
         q_word = self.request.GET.get('query')
@@ -116,7 +122,7 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ItemUpdateView, self).get_context_data(**kwargs)
         if self.request.POST:
-            data['formset'] = ImageFormset(self.request.POST)
+            data['formset'] = ImageFormset(self.request.POST, self.request.FILES)
         else:
             data['formset'] = ImageFormset()
         return data
