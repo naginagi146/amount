@@ -1,3 +1,5 @@
+from django.db.models import query
+from django.db.models.query import QuerySet
 from company.models import Reply
 from users.models import User
 from users.views import OnlyYouMixin
@@ -27,7 +29,10 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["images"] = Image.objects.all().filter(target__id='id')
+        item_list = Item.objects.values('id')
+        # for item_list in Image.objects.select_related('target').filter(target_id__in=item_list)
+        # context["images"] = Image.objects.filter(target_id__in=item_list)
+        context["images"] = Image.objects.select_related('target').filter(target_id__in=item_list)
         return context
 
 
