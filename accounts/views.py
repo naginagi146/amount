@@ -27,7 +27,7 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["images"] = Image.objects.filter(id=self.target_id)
+        context["images"] = Image.objects.all().filter(target__id='id')
         return context
 
 
