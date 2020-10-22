@@ -10,9 +10,7 @@
             アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
             <p>カテゴリー: {{ item.category }}</p>
             {% for image in images %}
-            {% if id == target_id %}
         <img src="{{ image.src.url }}" style="width: 300px;height: auto;"/>
-            {% endif %}
         {% endfor %}
         {% endfor %}
 
