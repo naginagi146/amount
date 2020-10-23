@@ -29,11 +29,39 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        item_list = Item.objects.values('id')
+        item_id = {}
+        item_list = []
+        images = 'target_id'
+        item_id['id'] = images
+        item_id = Item.objects.values('id')
+        item_list.append(item_id)
+        all_item = Item.objects.all()
+        # print(item_list)→ここでitemList in dictのクエリが一つできる
+        for item_id in all_item:
+            images = {}
+            images = Image.objects.filter(target_id=item_id).values()
+            item_list.append(images)
+            context["images"] = images
+            print(item_list)
+        return context
+
+        #     images ={}
+        #     image_list = []
+        #     images = Image.objects.filter(target_id=item_id)
+        #     image_list.append(images)
+        #     item_list.append(images)
+        #     context["images"] = images
+        #     print(item_list)
+        # return context
+        # ↑リストはまとめられたが、全オブジェクトでまとまってる
+
+
+
+        # item_list = Item.objects.values('id')
         # for item_list in Image.objects.select_related('target').filter(target_id__in=item_list)
         # context["images"] = Image.objects.filter(target_id__in=item_list)
-        context["images"] = Image.objects.select_related('target').filter(target_id__in=item_list)
-        return context
+        # context["images"] = Image.objects.select_related('target').filter(target_id__in=item_list)
+        # return context
 
 
     def get_queryset(self):
