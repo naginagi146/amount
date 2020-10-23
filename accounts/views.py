@@ -29,21 +29,35 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        item_id = {}
         item_list = []
-        images = 'target_id'
-        item_id['id'] = images
-        item_id = Item.objects.values('id')
-        item_list.append(item_id)
-        all_item = Item.objects.all()
-        # print(item_list)→ここでitemList in dictのクエリが一つできる
-        for item_id in all_item:
-            images = {}
-            images = Image.objects.filter(target_id=item_id).values()
-            item_list.append(images)
-            context["images"] = images
-            print(item_list)
-        return context
+        item = Item.objects.values('id','images')
+        item_list.append(item)
+        all_items = Item.objects.all()
+        for item in all_items:
+            print(item)
+            image_list = Image.objects.filter(target_id=item)
+            context["images"] = item_list
+            print(context)
+            return context
+
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     item_id = {}
+    #     item_list = []
+    #     images = 'target_id'
+    #     item_id['id'] = images
+    #     item_id = Item.objects.values('id')
+    #     item_list.append(item_id)
+    #     all_item = Item.objects.all()
+    #     # print(item_list)→ここでitemList in dictのクエリが一つできる
+    #     for item in all_item:
+    #         images = {}
+    #         images = Image.objects.filter(target_id=item_id).values()
+    #         item_list.append(images)
+    #         context["images"] = images
+    #         print(item_list)
+    #     return context
 
         #     images ={}
         #     image_list = []
