@@ -34,8 +34,8 @@ class ItemListView(LoginRequiredMixin, ListView):
         for item in all_item:
             image_list = Image.objects.filter(target_id=item)
             item_image_list = {
-            context["items"] : all_item,
-            context["images"] : image_list
+            context["items"] = all_item,
+            context["images"] = image_list
             }
             return context["target"].append(item_image_list)
         return context
