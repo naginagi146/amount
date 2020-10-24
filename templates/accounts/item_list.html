@@ -5,11 +5,11 @@
     <body>
     <div class="post">
 
-        {% for item in items %}
+        {% for item in ['target']items %}
             ユーザー: <a href="{% url 'users:profile' pk=item.contributor.pk %}">{{ item.contributor.user_name }}</a>
             アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
             <p>カテゴリー: {{ item.category }}</p>
-            {% for item in images %}
+            {% for image in images %}
         <img src="{{ image.src.url }}" style="width: 300px;height: auto;"/>
         {% endfor %}
         {% endfor %}
