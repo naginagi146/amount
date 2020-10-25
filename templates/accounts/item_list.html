@@ -4,13 +4,12 @@
 {% block contents %}
     <body>
     <div class="post">
-
-        {% for item in target.items %}
+        {% for item in object_list %}
             ユーザー: <a href="{% url 'users:profile' pk=item.contributor.pk %}">{{ items.contributor.user_name }}</a>
             アイテム名: <a href="{% url 'accounts:item_detail' pk=item.pk %}">{{ item.name }}</a>
             <p>カテゴリー: {{ item.category }}</p>
-            {% for image in target.images %}
-        <img src="{{ image.src.url }}" style="width: 300px;height: auto;"/>
+            {% for image in object_list %}
+        イメージ：<img src="{{ item.src.url }}" style="width: 300px;height: auto;"/>
         {% endfor %}
         {% endfor %}
 
