@@ -29,18 +29,19 @@ class ItemListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["target"] = []
+        item_with = []
+        context["target"] = item_with
         all_item = Item.objects.all()
         for item in all_item:
             image_list = Image.objects.filter(target_id=item)
-
-            context["items"] = item
-            context["images"] = image_list
-            item_image_list = {context["items"], context["images"]}
-            context["target"] = [item_image_list]
-            print(context["target"])
+            item_image = {
+            item,
+            image_list
+            }
+            item_with.append(item_image)
+        print(context)
         return context
-        print(item_image_list)
+
 
 
 
